@@ -17,3 +17,6 @@ target_link_libraries(random-sampling-test tsp)
 
 add_executable(backtracking-test "${CMAKE_SOURCE_DIR}/tests/backtracking.cpp")
 target_link_libraries(backtracking-test tsp)
+
+add_executable(greedy-test "${CMAKE_SOURCE_DIR}/tests/greedy.cpp")
+target_link_libraries(greedy-test tsp)
