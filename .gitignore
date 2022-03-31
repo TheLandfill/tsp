@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+.ycm_extra_conf.py
+Debug
+RDB
+Release
+Debug/
+RDB/
+Release/
