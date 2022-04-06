@@ -23,3 +23,6 @@ target_link_libraries(greedy-test tsp)
 
 add_executable(dijkstra-test "${CMAKE_SOURCE_DIR}/tests/dijkstra.cpp")
 target_link_libraries(dijkstra-test tsp)
+
+add_executable(big-boy-first-thirty-heuristics-test "${CMAKE_SOURCE_DIR}/tests/big-boy-first-thirty-heuristics.cpp")
+target_link_libraries(big-boy-first-thirty-heuristics-test tsp)

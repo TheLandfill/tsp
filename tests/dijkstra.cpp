@@ -21,7 +21,7 @@ int main() {
 	RNG rng{138};
 	Matrix<uint32_t> mat{22, 22, rng};
 	mat.write_to_file("mat.dat");
-	//dijkstra_runner(mat);
+	dijkstra_runner(mat);
 	Matrix<uint32_t> mat2{"known_mat.csv"};
 	dijkstra_runner(mat2);
 }

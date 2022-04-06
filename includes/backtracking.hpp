@@ -30,7 +30,7 @@ void Backtracker<T>::run(const Matrix<T>& mat, size_t start) {
 	cur_path.push_back(start);
 	cur_path_lengths.push_back(0);
 	run_iter(mat);
-	// std::cout << "\r\x1b[K";
+	std::cout << "\r\x1b[K";
 }
 
 template<typename T>
@@ -40,7 +40,7 @@ void Backtracker<T>::run_iter(const Matrix<T>& mat) {
 	if (visited.size() >= mat.get_num_cols()) {
 		shortest_path = cur_path;
 		shortest_path_length = cur_path_lengths.back();
-		// std::cout << "\r\x1b[K" << shortest_path_length << std::flush;
+		std::cout << "\r\x1b[K" << shortest_path_length << std::flush;
 	}
 	for (size_t i = 0; i < mat.get_num_cols(); i++) {
 		if (visited.count(i) > 0) {

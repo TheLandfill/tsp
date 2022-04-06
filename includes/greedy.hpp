@@ -17,6 +17,9 @@ private:
 
 template<typename T>
 void Greedy<T>::run(const Matrix<T>& mat, size_t start) {
+	visited.clear();
+	path.clear();
+	path_length = T{};
 	visited.insert(start);
 	path.emplace_back(start);
 	size_t cur = start;
