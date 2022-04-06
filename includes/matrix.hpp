@@ -28,6 +28,14 @@ private:
 template<typename T>
 Matrix<T>::Matrix(const std::filesystem::path& path) {
 	std::ifstream reader{path};
+	if (!reader.is_open()) {
+		std::string error_message;
+		error_message.reserve(1024);
+		error_message += "File `";
+		error_message += path;
+		error_message += "` not found!";
+		throw std::runtime_error(error_message);
+	}
 	reader >> num_rows >> num_cols;
 	data.resize(num_rows * num_cols);
 	for (size_t row = 0; row < num_rows; row++) {

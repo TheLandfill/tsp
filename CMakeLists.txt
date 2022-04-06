@@ -20,3 +20,6 @@ target_link_libraries(backtracking-test tsp)
 
 add_executable(greedy-test "${CMAKE_SOURCE_DIR}/tests/greedy.cpp")
 target_link_libraries(greedy-test tsp)
+
+add_executable(dijkstra-test "${CMAKE_SOURCE_DIR}/tests/dijkstra.cpp")
+target_link_libraries(dijkstra-test tsp)
