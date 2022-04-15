@@ -1,5 +1,6 @@
 #include "dijkstra.hpp"
 #include "greedy.hpp"
+#include "global-greedy.hpp"
 #include "backtracking.hpp"
 // Actually make a timer class
 #include <random>
@@ -55,6 +56,16 @@ int main() {
 			size_t prev = path[j - 1];
 			edge_freq_mat_greedy.at(prev, cur) += 1;
 		}
+	}
+	Global_Greedy<uint32_t> ggreed{};
+	ggreed.run(mat, 0);
+	std::vector<size_t> gg_path{ggreed.get_path()};
+	std::cout << "Global Greedy Path: ";
+	print_path(gg_path);
+	for (size_t i = 1; i < gg_path.size(); i++) {
+		size_t cur = gg_path[i];
+		size_t prev = gg_path[i - 1];
+		edge_freq_mat_greedy.at(prev, cur) += 1;
 	}
 	edge_freq_mat_greedy.write_to_file("edge_freq_mat_greedy.dat");
 	Matrix<uint32_t> masked_greedy_matrix{mat};
@@ -140,16 +151,16 @@ int main() {
 			random_true_negatives += (edge_freq_mat_random.at(cur_element, j) == 0);
 		}
 	}
-	std::cout << "Greedy True Positives: " << (double)greedy_true_positives/(double)num_nodes << "\n";
-	std::cout << "Greedy False Positives: " << (double)greedy_false_positives/(double)num_nodes << "\n";
-	std::cout << "Greedy True Negatives: " << (double)greedy_true_negatives/(double)num_nodes << "\n";
-	std::cout << "Greedy False Negatives: " << (double)greedy_false_negatives/(double)num_nodes << "\n";
-	std::cout << "Dijkstra True Positives: " << (double)dijkstra_true_positives/(double)num_nodes << "\n";
+	std::cout << "Greedy True Positives: "    << (double)greedy_true_positives   /(double)(num_nodes) << "\n";
+	std::cout << "Greedy False Positives: "   << (double)greedy_false_positives  /(double)(num_nodes) << "\n";
+	std::cout << "Greedy True Negatives: "    << (double)greedy_true_negatives   /(double)(num_nodes) << "\n";
+	std::cout << "Greedy False Negatives: "   << (double)greedy_false_negatives  /(double)(num_nodes) << "\n";
+	std::cout << "Dijkstra True Positives: "  << (double)dijkstra_true_positives /(double)num_nodes << "\n";
 	std::cout << "Dijkstra False Positives: " << (double)dijkstra_false_positives/(double)num_nodes << "\n";
-	std::cout << "Dijkstra True Negatives: " << (double)dijkstra_true_negatives/(double)num_nodes << "\n";
+	std::cout << "Dijkstra True Negatives: "  << (double)dijkstra_true_negatives /(double)num_nodes << "\n";
 	std::cout << "Dijkstra False Negatives: " << (double)dijkstra_false_negatives/(double)num_nodes << "\n";
-	std::cout << "Random True Positives: " << (double)random_true_positives/(double)num_nodes << "\n";
-	std::cout << "Random False Positives: " << (double)random_false_positives/(double)num_nodes << "\n";
-	std::cout << "Random True Negatives: " << (double)random_true_negatives/(double)num_nodes << "\n";
-	std::cout << "Random False Negatives: " << (double)random_false_negatives/(double)num_nodes << "\n";
+	std::cout << "Random True Positives: "    << (double)random_true_positives   /(double)num_nodes << "\n";
+	std::cout << "Random False Positives: "   << (double)random_false_positives  /(double)num_nodes << "\n";
+	std::cout << "Random True Negatives: "    << (double)random_true_negatives   /(double)num_nodes << "\n";
+	std::cout << "Random False Negatives: "   << (double)random_false_negatives  /(double)num_nodes << "\n";
 }
