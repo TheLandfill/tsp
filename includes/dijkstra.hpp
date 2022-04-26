@@ -1,23 +1,11 @@
 #pragma once
 #include "matrix.hpp"
-#include <limits>
+#include "max-or-inf.hpp"
+#include "edge.hpp"
 #include <queue>
 #include <unordered_set>
 #include <string>
 #include <algorithm>
-
-struct Edge {
-	size_t start, end;
-};
-
-template<typename T>
-constexpr T get_max_val_or_inf() {
-	if (std::numeric_limits<T>::has_infinity) {
-		return std::numeric_limits<T>::infinity();
-	} else {
-		return std::numeric_limits<T>::max();
-	}
-}
 
 template<typename T>
 struct Dijkstra_Node {

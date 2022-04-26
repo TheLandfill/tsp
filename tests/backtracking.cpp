@@ -1,22 +1,9 @@
 #include "backtracking.hpp"
 #include "random-sampling.hpp"
+#include "rng.hpp"
 #include <random>
 // Actually make a timer class
 #include <chrono>
-
-class RNG {
-public:
-	RNG(uint32_t seed = 1, uint32_t min = 1, uint32_t max = 100) :
-		rng(seed),
-		dist{min, max}
-	{}
-	uint32_t operator()() {
-		return dist(rng);
-	}
-private:
-	std::mt19937 rng;
-	std::uniform_int_distribution<std::mt19937::result_type> dist;
-};
 
 int main() {
 	RNG rng{138};

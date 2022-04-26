@@ -32,3 +32,6 @@ target_link_libraries(big-boy-first-thirty-heuristics-test tsp)
 
 add_executable(global-greedy-test "${CMAKE_SOURCE_DIR}/tests/global-greedy.cpp")
 target_link_libraries(global-greedy-test tsp)
+
+add_executable(sigma-male-algorithm-test "${CMAKE_SOURCE_DIR}/tests/sigma-male-algorithm.cpp")
+target_link_libraries(sigma-male-algorithm-test tsp)

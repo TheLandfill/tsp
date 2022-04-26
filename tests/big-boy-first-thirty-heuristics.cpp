@@ -1,16 +1,10 @@
 #include "greedy.hpp"
 #include "backtracking.hpp"
 #include "dijkstra.hpp"
+#include "rng.hpp"
+#include "print_path.hpp"
 #include <random>
 #include <chrono>
-
-void print_path(const std::vector<size_t>& path) {
-	std::cout << "[ ";
-	for (size_t i = 0; i < path.size() - 1; i++) {
-		std::cout << path[i] << ", ";
-	}
-	std::cout << path.back() << " ]\n";
-}
 
 uint64_t run_masked(const Matrix<uint64_t>& masked_greedy_matrix, uint64_t max_length) {
 	Backtracker<uint64_t> greed_bt{max_length};
@@ -23,20 +17,6 @@ uint64_t run_masked(const Matrix<uint64_t>& masked_greedy_matrix, uint64_t max_l
 	// print_path(shortest_path);
 	return greed_bt.get_shortest_path_length();
 }
-
-class RNG {
-public:
-	RNG(uint32_t seed = 1, uint32_t min = 1, uint32_t max = 100) :
-		rng(seed),
-		dist{min, max}
-	{}
-	uint32_t operator()() {
-		return dist(rng);
-	}
-private:
-	std::mt19937 rng;
-	std::uniform_int_distribution<std::mt19937::result_type> dist;
-};
 
 void run_func(const size_t num_nodes) {
 	RNG rng{427389};

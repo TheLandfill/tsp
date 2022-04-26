@@ -11,6 +11,9 @@ public:
 	void run(const Matrix<T>& mat, size_t start);
 	const std::vector<size_t>& get_shortest_path() const;
 	T get_shortest_path_length();
+	// Premature optimization that's easy enough to implement so I'm
+	// implementing it.
+	void reset(T initial_path_length);
 private:
 	void run_iter(const Matrix<T>& mat);
 private:
@@ -68,4 +71,13 @@ const std::vector<size_t>& Backtracker<T>::get_shortest_path() const {
 template<typename T>
 T Backtracker<T>::get_shortest_path_length() {
 	return shortest_path_length;
+}
+
+template<typename T>
+void Backtracker<T>::reset(T initial_path_length) {
+	visited.clear();
+	cur_path.clear();
+	shortest_path.clear();
+	cur_path_lengths.clear();
+	shortest_path_length = initial_path_length;
 }

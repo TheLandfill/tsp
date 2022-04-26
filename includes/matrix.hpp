@@ -8,6 +8,7 @@
 template<typename T>
 class Matrix {
 public:
+	Matrix();
 	Matrix(const std::filesystem::path& path);
 
 	template<typename Func>
@@ -24,6 +25,9 @@ private:
 	size_t num_rows, num_cols;
 	std::vector<T> data;
 };
+
+template<typename T>
+Matrix<T>::Matrix() : num_rows(0), num_cols(0), data() {}
 
 template<typename T>
 Matrix<T>::Matrix(const std::filesystem::path& path) {

@@ -2,31 +2,12 @@
 #include "greedy.hpp"
 #include "global-greedy.hpp"
 #include "backtracking.hpp"
+#include "rng.hpp"
+#include "print_path.hpp"
+#include "print-accuracy-mat.hpp"
+#include "sigma-male-algorithm.hpp"
 // Actually make a timer class
-#include <random>
 #include <chrono>
-
-class RNG {
-public:
-	RNG(uint32_t seed = 1, uint32_t min = 1, uint32_t max = 100) :
-		rng(seed),
-		dist{min, max}
-	{}
-	uint32_t operator()() {
-		return dist(rng);
-	}
-private:
-	std::mt19937 rng;
-	std::uniform_int_distribution<std::mt19937::result_type> dist;
-};
-
-void print_path(const std::vector<size_t>& path) {
-	std::cout << "[ ";
-	for (size_t i = 0; i < path.size() - 1; i++) {
-		std::cout << path[i] << ", ";
-	}
-	std::cout << path.back() << " ]\n";
-}
 
 uint32_t run_masked(const Matrix<uint32_t>& masked_greedy_matrix) {
 	Backtracker<uint32_t> greed_bt{3000};
@@ -112,6 +93,12 @@ int main() {
 	size_t length_of_shortest_path = bt.get_shortest_path_length();
 	std::cout << "Length of Shortest Path: " << length_of_shortest_path << "\n";
 	print_path(shortest_path);
+	std::cout << "Accuracy Matrix of Greedy\n";
+	print_accuracy_matrix(shortest_path, edge_freq_mat_greedy, 256.0 / 22.0);
+	std::cout << "Accuracy Matrix of Dijkstra\n";
+	print_accuracy_matrix(shortest_path, edge_freq_mat_dijkstra, 256.0 / 22.0);
+	std::cout << "Accuracy Matrix of Random\n";
+	print_accuracy_matrix(shortest_path, edge_freq_mat_random, 256.0 / 22.0);
 	uint32_t greedy_false_negatives = 0;
 	uint32_t greedy_true_positives = 0;
 	uint32_t dijkstra_false_negatives = 0;

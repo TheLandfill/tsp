@@ -13,7 +13,6 @@ public:
 private:
 	std::vector<uint8_t> num_degree;
 	std::vector<size_t> path;
-	T path_length;
 };
 
 template<typename T>
@@ -49,7 +48,7 @@ void Global_Greedy<T>::run(const Matrix<T>& mat, size_t start) {
 		global_greedy_nodes.end(),
 		[](const Global_Greedy_Node<T>& a, const Global_Greedy_Node<T>& b){ return a.weight < b.weight; }
 	);
-	TSP_Linked_List<T> tsp_ll{mat.get_num_cols()};
+	TSP_Linked_List tsp_ll{mat.get_num_cols()};
 	for (const auto& node : global_greedy_nodes) {
 		if (num_degree[node.start] == 2 || num_degree[node.end] == 2) {
 			continue;

@@ -1,19 +1,6 @@
 #include "dijkstra.hpp"
+#include "rng.hpp"
 #include <random>
-
-class RNG {
-public:
-	RNG(uint32_t seed = 1, uint32_t min = 1, uint32_t max = 100) :
-		rng(seed),
-		dist{min, max}
-	{}
-	uint32_t operator()() {
-		return dist(rng);
-	}
-private:
-	std::mt19937 rng;
-	std::uniform_int_distribution<std::mt19937::result_type> dist;
-};
 
 void dijkstra_runner(const Matrix<uint32_t>& mat);
 
