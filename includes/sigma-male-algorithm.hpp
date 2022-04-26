@@ -8,6 +8,7 @@
 #include <unordered_set>
 #include <random>
 #include <iostream>
+#include <cmath>
 
 template<typename T>
 class Sigma_Male {
@@ -31,8 +32,8 @@ void Sigma_Male<T>::run(const Matrix<T>& mat, size_t start, size_t num_iteration
 	Global_Greedy<T> gg;
 	Matrix<T> cur_mat = mat;
 	K_Opt<T> kopt(137, 5);
-	double path_length_scale = 1.0;
 	double cur_path_length = 1.0;
+	double thing_to_add = 0.0;
 	for (size_t i = 0; i < num_iterations; i++) {
 		gg.run(cur_mat, start);
 		std::vector<size_t> path = gg.get_path();
@@ -45,9 +46,6 @@ void Sigma_Male<T>::run(const Matrix<T>& mat, size_t start, size_t num_iteration
 			//std::cout << "--------------------------------------------------------------------------------\n";
 		}
 		cur_path_length = get_path_length(path, mat);
-		if (i == 0) {
-			path_length_scale = cur_path_length;
-		}
 		min_path_length = std::min(min_path_length, get_path_length(path, mat));
 		std::vector<Edge> edges;
 		edges.reserve(path.size());
@@ -55,7 +53,13 @@ void Sigma_Male<T>::run(const Matrix<T>& mat, size_t start, size_t num_iteration
 		for (size_t j = 0; j < path.size() - 1; j++) {
 			const size_t& cur = path[j];
 			const size_t& next = path[j + 1];
-			frequency.at(cur, next) += path_length_scale / cur_path_length;
+			if (cur_path_length <= min_path_length) {
+				thing_to_add = 1.0;
+			} else {
+				thing_to_add = 1.0 / (1.0 + cur_path_length - min_path_length);
+				thing_to_add *= thing_to_add;
+			}
+			frequency.at(cur, next) += thing_to_add;
 			edges.push_back({cur, next});
 			path_length += mat.at(cur, next);
 		}
@@ -64,7 +68,8 @@ void Sigma_Male<T>::run(const Matrix<T>& mat, size_t start, size_t num_iteration
 		std::vector<double> edge_weights;
 		edge_weights.reserve(edges.size());
 		for (const Edge& edge : edges) {
-			edge_weights.push_back(-mat.at(edge.start, edge.end));
+			T cur_edge_length = mat.at(edge.start, edge.end);
+			edge_weights.push_back(mat.at(edge.start, edge.end));
 		}
 		std::discrete_distribution<size_t> dist{edge_weights.begin(), edge_weights.end()};
 		for (size_t j = 0; j < 2 * sqrt(edges.size()); j++) {

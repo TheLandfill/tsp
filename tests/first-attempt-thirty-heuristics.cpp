@@ -27,15 +27,16 @@ int main() {
 	Matrix<uint32_t> mat{num_nodes, num_nodes, rng};
 	mat.write_to_file("mat.dat");
 	Greedy<uint32_t> greed{};
-	Matrix<uint32_t> edge_freq_mat_greedy{num_nodes, num_nodes, [](){ return 0; }};
+	Matrix<double> edge_freq_mat_greedy{num_nodes, num_nodes, [](){ return 0; }};
 	for (size_t i = 0; i < num_nodes; i++) {
 		greed.run(mat, i);
 		std::vector<size_t> path{greed.get_path()};
+		double path_length = get_path_length(path, mat);
 		// print_path(path);
 		for (size_t j = 1; j < path.size(); j++) {
 			size_t cur = path[j];
 			size_t prev = path[j - 1];
-			edge_freq_mat_greedy.at(prev, cur) += 1;
+			edge_freq_mat_greedy.at(prev, cur) += 1.0 / path_length;
 		}
 	}
 	Global_Greedy<uint32_t> ggreed{};
@@ -43,10 +44,11 @@ int main() {
 	std::vector<size_t> gg_path{ggreed.get_path()};
 	std::cout << "Global Greedy Path: ";
 	print_path(gg_path);
+	double path_length = get_path_length(gg_path, mat);
 	for (size_t i = 1; i < gg_path.size(); i++) {
 		size_t cur = gg_path[i];
 		size_t prev = gg_path[i - 1];
-		edge_freq_mat_greedy.at(prev, cur) += 1;
+		edge_freq_mat_greedy.at(prev, cur) += 1.0 / path_length;
 	}
 	edge_freq_mat_greedy.write_to_file("edge_freq_mat_greedy.dat");
 	Matrix<uint32_t> masked_greedy_matrix{mat};
@@ -59,7 +61,7 @@ int main() {
 	}
 	masked_greedy_matrix.write_to_file("masked_greedy_matrix.dat");
 	uint32_t potential_shortest_length = run_masked(masked_greedy_matrix);
-	Matrix<uint32_t> edge_freq_mat_dijkstra{num_nodes, num_nodes, [](){ return 0; }};
+	Matrix<double> edge_freq_mat_dijkstra{num_nodes, num_nodes, [](){ return 0; }};
 	Dijkstra<uint32_t> dijkstra;
 	for (size_t start = 0; start < num_nodes; start++) {
 		dijkstra.run(mat, start);
@@ -68,7 +70,7 @@ int main() {
 			edge_freq_mat_dijkstra.at(edge.start, edge.end) += 1;
 		}
 	}
-	Matrix<uint32_t> edge_freq_mat_random{num_nodes, num_nodes, [](){ return 0; }};
+	Matrix<double> edge_freq_mat_random{num_nodes, num_nodes, [](){ return 0; }};
 	std::vector<size_t> nodes_for_random;
 	nodes_for_random.reserve(num_nodes);
 	for (size_t i = 0; i < num_nodes; i++) {
@@ -79,10 +81,11 @@ int main() {
 	engine.seed(seed);
 	for (size_t i = 0; i < num_nodes; i++) {
 		std::shuffle(nodes_for_random.begin(), nodes_for_random.end(), engine);
+		double path_length = get_path_length(nodes_for_random, mat);
 		for (size_t j = 1; j < nodes_for_random.size(); j++) {
 			size_t cur = nodes_for_random[j];
 			size_t prev = nodes_for_random[j - 1];
-			edge_freq_mat_random.at(prev, cur) += 1;
+			edge_freq_mat_random.at(prev, cur) += 1.0 / path_length;
 		}
 	}
 	// Found using backtracking
@@ -94,11 +97,11 @@ int main() {
 	std::cout << "Length of Shortest Path: " << length_of_shortest_path << "\n";
 	print_path(shortest_path);
 	std::cout << "Accuracy Matrix of Greedy\n";
-	print_accuracy_matrix(shortest_path, edge_freq_mat_greedy, 256.0 / 22.0);
+	print_accuracy_matrix(shortest_path, edge_freq_mat_greedy);
 	std::cout << "Accuracy Matrix of Dijkstra\n";
-	print_accuracy_matrix(shortest_path, edge_freq_mat_dijkstra, 256.0 / 22.0);
+	print_accuracy_matrix(shortest_path, edge_freq_mat_dijkstra);
 	std::cout << "Accuracy Matrix of Random\n";
-	print_accuracy_matrix(shortest_path, edge_freq_mat_random, 256.0 / 22.0);
+	print_accuracy_matrix(shortest_path, edge_freq_mat_random);
 	uint32_t greedy_false_negatives = 0;
 	uint32_t greedy_true_positives = 0;
 	uint32_t dijkstra_false_negatives = 0;
