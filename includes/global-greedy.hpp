@@ -1,6 +1,6 @@
 #pragma once
 #include "matrix.hpp"
-#include "tsp_linked_list.hpp"
+#include "tsp-linked-list.hpp"
 #include <vector>
 #include <algorithm>
 #include <queue>
