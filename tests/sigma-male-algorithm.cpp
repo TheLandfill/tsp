@@ -6,19 +6,23 @@
 
 int main() {
 	RNG rng{138};
-	size_t problem_size = 30;
+	size_t problem_size = 22;
+	size_t start = 0;
 	Matrix<uint32_t> mat{problem_size, problem_size, rng};
 	mat.write_to_file("mat.dat");
+	Global_Greedy<uint32_t> gg;
+	gg.run(mat, start);
+	std::cout << "Multifragment Length: " << get_path_length(gg.get_path(), mat) << "\n";
 	Sigma_Male<uint32_t> sm{rng()};
 	size_t num_iterations = 256;
-	sm.run(mat, 0, num_iterations, false);
+	sm.run(mat, start, num_iterations, false);
 	std::cout << "Ran " << num_iterations << " iterations of sigma male algorithm.\n";
 	Sigma_Male<uint32_t> sm_kopt{rng()};
-	sm_kopt.run(mat, 0, num_iterations);
+	sm_kopt.run(mat, start, num_iterations);
 	std::cout << "Ran " << num_iterations << " iterations of sigma male algorithm.\n";
 	std::cout << "Found path of length " << sm_kopt.get_min_path_length() << ".\n";
 	Backtracker<uint32_t> bt{sm_kopt.get_min_path_length()};
-	bt.run(mat, 0);
+	bt.run(mat, start);
 	sm.get_freq_mat().write_to_file("sigma-male-mat.dat");
 	const auto& sm_freq_mat = sm.get_freq_mat();
 	const auto& sm_kopt_freq_mat = sm_kopt.get_freq_mat();
