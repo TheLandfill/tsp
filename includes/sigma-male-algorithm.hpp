@@ -3,7 +3,7 @@
 #include "max-or-inf.hpp"
 #include "global-greedy.hpp"
 #include "edge.hpp"
-#include "print_path.hpp"
+#include "print-info.hpp"
 #include "k-opt.hpp"
 #include <unordered_set>
 #include <random>
@@ -13,21 +13,24 @@
 template<typename T>
 class Sigma_Male {
 public:
-	Sigma_Male(uint32_t seed);
-	void run(const Matrix<T>& mat, size_t start, size_t num_iterations, bool run_kopt = true);
+	Sigma_Male(uint32_t seed, double recency = 1.0 / 1024.0);
+	void grind(const Matrix<T>& mat, size_t start, size_t num_iterations, bool run_kopt = true);
 	const Matrix<double>& get_freq_mat();
 	T get_min_path_length() const;
+	const std::vector<size_t>& get_shortest_path_found();
 private:
 	Matrix<double> frequency;
+	std::vector<size_t> shortest_path_found;
 	T min_path_length;
 	std::mt19937 rng;
+	double recency;
 };
 
 template<typename T>
-Sigma_Male<T>::Sigma_Male(uint32_t s) : min_path_length{get_max_val_or_inf<T>()}, rng{s} {}
+Sigma_Male<T>::Sigma_Male(uint32_t s, double r) : min_path_length{get_max_val_or_inf<T>()}, rng{s}, recency(r) {}
 
 template<typename T>
-void Sigma_Male<T>::run(const Matrix<T>& mat, size_t start, size_t num_iterations, bool run_kopt) {
+void Sigma_Male<T>::grind(const Matrix<T>& mat, size_t start, size_t num_iterations, bool run_kopt) {
 	frequency = Matrix<double>(mat.get_num_rows(), mat.get_num_cols(), [](){ return 0; });
 	Global_Greedy<T> gg;
 	Matrix<T> cur_mat = mat;
@@ -46,7 +49,10 @@ void Sigma_Male<T>::run(const Matrix<T>& mat, size_t start, size_t num_iteration
 			//std::cout << "--------------------------------------------------------------------------------\n";
 		}
 		cur_path_length = get_path_length(path, mat);
-		min_path_length = std::min(min_path_length, get_path_length(path, mat));
+		if (cur_path_length < min_path_length) {
+			min_path_length = get_path_length(path, mat);
+			shortest_path_found = path;
+		}
 		std::vector<Edge> edges;
 		edges.reserve(path.size());
 		T path_length{};
@@ -59,7 +65,8 @@ void Sigma_Male<T>::run(const Matrix<T>& mat, size_t start, size_t num_iteration
 				thing_to_add = 1.0 / (1.0 + cur_path_length - min_path_length);
 				thing_to_add *= thing_to_add;
 			}
-			frequency.at(cur, next) += thing_to_add;
+			frequency.at(cur, next) *= (1.0 - recency);
+			frequency.at(cur, next) += thing_to_add * recency;
 			edges.push_back({cur, next});
 			path_length += mat.at(cur, next);
 		}

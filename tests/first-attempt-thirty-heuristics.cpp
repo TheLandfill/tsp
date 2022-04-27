@@ -3,8 +3,7 @@
 #include "global-greedy.hpp"
 #include "backtracking.hpp"
 #include "rng.hpp"
-#include "print_path.hpp"
-#include "print-accuracy-mat.hpp"
+#include "print-info.hpp"
 #include "sigma-male-algorithm.hpp"
 // Actually make a timer class
 #include <chrono>

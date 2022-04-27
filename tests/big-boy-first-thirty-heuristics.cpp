@@ -2,7 +2,7 @@
 #include "backtracking.hpp"
 #include "dijkstra.hpp"
 #include "rng.hpp"
-#include "print_path.hpp"
+#include "print-info.hpp"
 #include <random>
 #include <chrono>
 

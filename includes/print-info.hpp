@@ -14,3 +14,12 @@ T get_path_length(const std::vector<size_t> & path, const Matrix<T>& mat) {
 	}
 	return path_length;
 }
+
+void print_accuracy_matrix(
+	const std::vector<size_t>& actual_path,
+	const Matrix<double>& predicted_freq
+);
+
+void print_probability_matrix(
+	const Matrix<double>& predicted_freq
+);
