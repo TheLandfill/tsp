@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <queue>
 
+// Commonly known as the Multi-Fragment Algorithm
 template<typename T>
 class Global_Greedy {
 public:

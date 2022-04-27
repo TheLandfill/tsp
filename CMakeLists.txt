@@ -35,3 +35,6 @@ target_link_libraries(global-greedy-test tsp)
 
 add_executable(sigma-male-algorithm-test "${CMAKE_SOURCE_DIR}/tests/sigma-male-algorithm.cpp")
 target_link_libraries(sigma-male-algorithm-test tsp)
+
+add_executable(double-edge-nearest-neighbor-test "${CMAKE_SOURCE_DIR}/tests/double-edge-nearest-neighbor.cpp")
+target_link_libraries(double-edge-nearest-neighbor-test tsp)

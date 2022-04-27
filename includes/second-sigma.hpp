@@ -18,6 +18,7 @@ public:
 	);
 	const std::vector<size_t>& get_shortest_path_found() const;
 	T get_min_path_length() const;
+	size_t get_iter() const;
 private:
 	void fill_matrix(const Matrix<T>& mat, const Matrix<double>& edge_weights);
 private:
@@ -26,6 +27,7 @@ private:
 	T min_path_length;
 	std::mt19937 rng;
 	double recency;
+	size_t iteration_min_path_length_found = -1;
 };
 
 template<typename T>
@@ -59,6 +61,7 @@ void Second_Sigma<T>::grind(
 		if (cur_path_length < min_path_length) {
 			min_path_length = get_path_length(path, mat);
 			shortest_path_found = path;
+			iteration_min_path_length_found = iter;
 		}
 		std::vector<Edge> edges;
 		edges.reserve(path.size());
@@ -99,7 +102,7 @@ void Second_Sigma<T>::fill_matrix(const Matrix<T>& mat, const Matrix<double>& fr
 		for (size_t col = 0; col < mat.get_num_cols(); col++) {
 			double cur_freq = freq_mat.at(row, col);
 			if (cur_freq <= 0.00001) {
-				decision_mat.at(row, col) = get_max_val_or_inf<double>();
+				decision_mat.at(row, col) = get_max_val_or_inf<double>() / mat.get_num_cols();
 			} else {
 				decision_mat.at(row, col) = mat.at(row, col) / cur_freq;
 			}
@@ -115,4 +118,9 @@ const std::vector<size_t>& Second_Sigma<T>::get_shortest_path_found() const {
 template<typename T>
 T Second_Sigma<T>::get_min_path_length() const {
 	return min_path_length;
+}
+
+template<typename T>
+size_t Second_Sigma<T>::get_iter() const {
+	return iteration_min_path_length_found;
 }

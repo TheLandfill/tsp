@@ -27,4 +27,5 @@ int main() {
 	std::cout << temp_length << " ]\n";
 	length += temp_length;
 	std::cout << "Total Length: " << length << "\n";
+	return 0;
 }
